@@ -2,7 +2,7 @@ from .base import *
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'REPLACE-ME'
+SECRET_KEY = 'xyz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -22,6 +22,7 @@ DATABASES = {
 
 INSTALLED_APPS += [
     'django_extensions',
+    
 ]
 
 try:

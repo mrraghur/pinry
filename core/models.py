@@ -1,17 +1,19 @@
 import requests
-
 from io import BytesIO
-
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.dispatch import receiver
-
 from django_images.models import Image as BaseImage, Thumbnail
 from taggit.managers import TaggableManager
+from django.http.response import Http404
+
 
 from users.models import User
+from PIL import Image as PILImage
+from cairosvg import svg2png
 
+import pdb
 
 class ImageManager(models.Manager):
     _default_ua = {
@@ -28,7 +30,21 @@ class ImageManager(models.Manager):
         if referer is not None:
             headers["Referer"] = referer
         response = requests.get(url, headers=headers)
-        buf.write(response.content)
+        if response.content[:4] == b'<svg':
+            imageType = 'svg'
+            svg2png(bytestring=response.content,write_to='output')
+
+            buf.write(open('output','rb').read())
+        else:
+            buf.write(response.content)
+            tempImage = open('output','wb')
+            tempImage.write(response.content)
+            tempImage.close()
+
+        dims = PILImage.open('output').size
+        if dims[0] < 45 or dims[1] < 45:
+            ##Write here logic for clean exit if image is small like icons.
+            raise Http404("Given image is not valid for submission")
         obj = InMemoryUploadedFile(buf, 'image', file_name,
                                    None, buf.tell(), None)
         # create the image and its thumbnails in one transaction, removing
@@ -91,6 +107,7 @@ class Pin(models.Model):
     image = models.ForeignKey(Image, related_name='pin', on_delete=models.CASCADE)
     published = models.DateTimeField(auto_now_add=True)
     tags = TaggableManager()
+    stars = models.PositiveIntegerField(default=0, blank=True, null=True)
 
     def tag_list(self):
         return self.tags.all()

@@ -98,6 +98,7 @@ class PinSerializer(serializers.HyperlinkedModelSerializer):
             "image",
             "image_by_id",
             "tags",
+            "stars"
         )
 
     submitter = UserSerializer(read_only=True)

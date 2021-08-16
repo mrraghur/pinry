@@ -1,0 +1,17 @@
+1. Django super user and rest framework
+#Links for api authentication
+#https://www.youtube.com/watch?v=PFcnQbOfbUU&t=154s
+#https://stackoverflow.com/questions/26906630/django-rest-framework-authentication-credentials-were-not-provided
+
+
+2. Finish the scraping pipeline.
+Add fieldname in serializer.py, 
+add in models what type of field it is, 
+python manage.py makemigrations
+python manage.py migrate
+
+
+3. Modify the front-end to add tags (TF-IDF) and description.
+
+4. Add trending topics to UI and find a source for trending topics.
+

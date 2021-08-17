@@ -1,43 +1,28 @@
 import sqlite3
 import pdb
-def connect():
-    return sqlite3.connect('./db.sqlite3', timeout=10)
 
-def createTable(connection):
-    with connection:
-        connection.execute("""CREATE TABLE "urls_to_be_scraped" (
-	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-	"url"	TEXT NOT NULL UNIQUE,
-	"isScraped"	BOOLEAN NOT NULL DEFAULT 0);""")
+def connectToDatabase(database):
+    return sqlite3.connect(database, timeout=10)
 
 def parseRecord(s, isScraped):
     return f'("{s}", {isScraped})'
 
-def insertRecords(connection,records):
-    records = ",".join(list(map(parseRecord,records, [False]*len(records))))
-    insertCommand = f"INSERT INTO urls_to_be_scraped (url, isScraped) VALUES {records}"
-    # print(insertCommand)
-    connection.execute(insertCommand)
-
-def getRecords(connection):
-    getCommand = f"SELECT * from urls_to_be_scraped"
-    return connection.execute(getCommand)
-
-def DeleteTable(connection):
-    with connection:
-        connection.execute("DROP TABLE urls_to_be_scraped")
+def getUrlFromOutput(s):
+    return s[0]
 
 def getAllUrlsToBeScraped(connection):
     command = "SELECT url FROM urls_to_be_scraped WHERE isScraped==0"
-    return connection.execute(command).fetchall()
+    urls = list(map(getUrlFromOutput,connection.execute(command).fetchall()))
+    return urls
 
 def addUrlsToBeScraped(connection,urls):
     """urls is a list"""
     urlsToBeAdded = []
+    if urls == []:
+        return
     for u in urls:
         urlCheck = connection.execute(f'SELECT url FROM urls_to_be_scraped WHERE url=="{u}"').fetchall()
         if urlCheck == []:
-            connection.execute("")
             urlsToBeAdded.append(u)
 
     records = ",".join(list(map(parseRecord,urlsToBeAdded, [False]*len(urlsToBeAdded))))
@@ -52,7 +37,8 @@ def updateUrlAsScraped(connection,url):
 
 
 
-con = connect()
+con = connectToDatabase('../db.sqlite3')
+updateUrlAsScraped(con,"https://github.com/0xAX/erlang-bookmarks")
 
 # DeleteTable(con)
 
@@ -63,18 +49,18 @@ con = connect()
 # print(githubUrls[:20])
 
 # insertRecords(con,githubUrls[:10])
-records = getRecords(con)
-print(records.fetchall())
+# records = getRecords(con)
+# print(records.fetchall())
 
-urls_to_be_scraped = list(map(lambda x:x[0],getAllUrlsToBeScraped(con)))
-print(urls_to_be_scraped)
+# urls_to_be_scraped = list(map(lambda x:x[0],getAllUrlsToBeScraped(con)))
+# print(urls_to_be_scraped)
 
-urls = ['https://github.com/anooj-gandham/blogSearch','https://github.com/anooj-gandham/wappalyzer_1','https://github.com/0x09AL','https://github.com']
-addUrlsToBeScraped(con,urls)
+# urls = ['https://github.com/anooj-gandham/blogSearch','https://github.com/anooj-gandham/wappalyzer_1','https://github.com/0x09AL','https://github.com']
+# addUrlsToBeScraped(con,urls)
 
-records = getRecords(con)
-print(records.fetchall())
-
+# records = getRecords(con)
+# print(records.fetchall())
+pdb.set_trace()
 
 con.commit()
 con.close()

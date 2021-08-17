@@ -107,7 +107,7 @@ class Pin(models.Model):
     image = models.ForeignKey(Image, related_name='pin', on_delete=models.CASCADE)
     published = models.DateTimeField(auto_now_add=True)
     tags = TaggableManager()
-    stars = models.PositiveIntegerField(default=0, blank=True, null=True)
+    stars = models.CharField(default=0, max_length=32, blank=True, null=True)
 
     def tag_list(self):
         return self.tags.all()

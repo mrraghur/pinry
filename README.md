@@ -18,7 +18,7 @@ For more information ( screenshots and document ) visit [getpinry.com](https://g
 
 ## To Run the service
 
-- git clone [http://github.com/anooj-gandham/pinry](http://github.com/anooj-gandham/pinry)
+- `git clone [http://github.com/anooj-gandham/pinry](http://github.com/anooj-gandham/pinry)`
 
 To run the backend
 

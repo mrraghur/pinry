@@ -43,8 +43,8 @@ class ImageManager(models.Manager):
 
         dims = PILImage.open('output').size
         if dims[0] < 45 or dims[1] < 45:
-            ##Write here logic for clean exit if image is small like icons.
             raise Http404("Given image is not valid for submission")
+            #TODO Change the error to 400, not 404.
         obj = InMemoryUploadedFile(buf, 'image', file_name,
                                    None, buf.tell(), None)
         # create the image and its thumbnails in one transaction, removing
@@ -94,7 +94,6 @@ class Board(models.Model):
     name = models.CharField(max_length=128, blank=False, null=False)
     private = models.BooleanField(default=False, blank=False)
     pins = models.ManyToManyField("Pin", related_name="pins", blank=True)
-
     published = models.DateTimeField(auto_now_add=True)
 
 

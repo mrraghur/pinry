@@ -6,7 +6,6 @@ to skim through format.
 
 For more information ( screenshots and document ) visit [getpinry.com](https://getpinry.com).
 
-
 ## Features
 
 - Image fetch and online preview
@@ -17,25 +16,23 @@ For more information ( screenshots and document ) visit [getpinry.com](https://g
 - Both public and private boards (add @2020.02.11)
 - Search by tags / Search boards with name (add @2020.02.14)
 
-## Install with Docker
-See our full documentation at [https://docs.getpinry.com/install-with-docker/](https://docs.getpinry.com/install-with-docker/)
+## To Run the service
 
-## Requirements
+- git clone [http://github.com/anooj-gandham/pinry](http://github.com/anooj-gandham/pinry)
 
-See our full documentation at [https://docs.getpinry.com/development/](https://docs.getpinry.com/development/)
+To run the backend
 
+- `pip install -r requirements.txt`
+- `python manage.py migrate`
+- `python manage.py runserver`
 
-## Development
+To run Frontend
 
-See our full documentation at [https://docs.getpinry.com/development/](https://docs.getpinry.com/development/)
+- `cd pinry-spa && yarn serve`
 
-## Contributors
+To run Scraper
 
-The core contributors for Pinry have been/currently are:
-
-* Isaac Bythewood <http://isaacbythewood.com/>
-* Krzysztof Klimonda <https://github.com/kklimonda>
-* Lapo Luchini <https://github.com/lapo-luchini>
-* Ji Qu <https://winkidney.com/>
-
-For a full list of contributors check out the [GitHub Contributors Graph](https://github.com/pinry/pinry/graphs/contributors)
+- Add Github Repository Urls to urls_to_be_scraped table in db.sqlite3
+  `INSERT INTO urls_to_be_scraped (url) VALUES (<url1>), (<url_2>)...`
+- `cd scrapeGithub`
+- `scrapy crawl images`

@@ -24,12 +24,14 @@ def addUrlsToBeScraped(connection,urls):
         urlCheck = connection.execute(f'SELECT url FROM urls_to_be_scraped WHERE url=="{u}"').fetchall()
         if urlCheck == []:
             urlsToBeAdded.append(u)
+    if len(urlsToBeAdded) > 0:
+        records = ",".join(list(map(parseRecord,urlsToBeAdded, [False]*len(urlsToBeAdded))))
+        insertCommand = f"INSERT INTO urls_to_be_scraped (url, isScraped) VALUES {records}"
+        connection.execute(insertCommand)
 
-    records = ",".join(list(map(parseRecord,urlsToBeAdded, [False]*len(urlsToBeAdded))))
-    insertCommand = f"INSERT INTO urls_to_be_scraped (url, isScraped) VALUES {records}"
-    connection.execute(insertCommand)
+    return
 
-def updateUrlAsScraped(connection,url):
+def markUrlAsScraped(connection,url):
     """url is a string"""
     updateCommand = f'UPDATE urls_to_be_scraped SET isScraped=1 WHERE url=="{url}"'
     connection.execute(updateCommand)
@@ -37,8 +39,8 @@ def updateUrlAsScraped(connection,url):
 
 
 
-con = connectToDatabase('../db.sqlite3')
-updateUrlAsScraped(con,"https://github.com/0xAX/erlang-bookmarks")
+# con = connectToDatabase('../db.sqlite3')
+# updateUrlAsScraped(con,"https://github.com/0xAX/erlang-bookmarks")
 
 # DeleteTable(con)
 
@@ -60,7 +62,7 @@ updateUrlAsScraped(con,"https://github.com/0xAX/erlang-bookmarks")
 
 # records = getRecords(con)
 # print(records.fetchall())
-pdb.set_trace()
+# pdb.set_trace()
 
-con.commit()
-con.close()
+# con.commit()
+# con.close()

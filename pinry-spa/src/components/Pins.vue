@@ -38,9 +38,6 @@
                 <div class="pin-footer">
                   <div class="description" v-show="item.description" v-html="niceLinks(item.description)"></div>
                   <div class="details">
-                    <div class="is-pulled-left">
-                      <img class="avatar" :src="item.avatar" alt="">
-                    </div>
                     <div class="pin-info">
                       <span class="dim">Pinned by&nbsp;
                         <span>
@@ -354,7 +351,7 @@ $avatar-height: 30px;
 }
 .pin-footer {
   position: relative;
-  top: $pin-footer-position-fix;
+  // top: $pin-footer-position-fix;
   background-color: white;
   border-radius: 0 0 3px 3px ;
   box-shadow: 0 1px 0 #bbb;
@@ -371,7 +368,7 @@ $avatar-height: 30px;
     > .pin-info {
       line-height: 16px;
       width: 220px;
-      padding-left: $avatar-width + 5px;
+      // padding-left: $avatar-width + 5px;
     }
     .pin-info a {
       font-weight: bold;

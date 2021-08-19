@@ -2,7 +2,16 @@ import sqlite3
 import pdb
 
 def connectToDatabase(database):
-    return sqlite3.connect(database, timeout=10)
+    conn = sqlite3.connect(database, timeout=10)
+    createTable = """
+    CREATE TABLE IF NOT EXISTS "urls_to_be_scraped" (
+	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"url"	TEXT NOT NULL UNIQUE,
+	"isScraped"	INTEGER DEFAULT 0
+    );
+    """
+    conn.execute(createTable)
+    return conn
 
 def parseRecord(s, isScraped):
     return f'("{s}", {isScraped})'

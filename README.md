@@ -24,7 +24,10 @@ To run the backend
 
 - `pip install -r requirements.txt`
 - `python manage.py migrate`
+- `pipenv run python manage.py createsuperuser`
 - `python manage.py runserver`
+- In separate terminal `http POST http://localhost:8000/api-token-auth/ username="<superuser name>" password="<superuser password>"`
+This will generate auth token for accessing backend, paste this token in /scrapeGithub/scrapeImages.py
 
 To run Frontend
 

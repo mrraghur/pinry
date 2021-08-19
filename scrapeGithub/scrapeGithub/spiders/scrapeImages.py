@@ -53,7 +53,7 @@ class ScrapeImages(scrapy.Spider):
             # pdb.set_trace()
             stars = response.xpath('//a[@class="social-count js-social-count"]/text()').getall()[0].split()[0]
             headers = {
-                'Authorization': 'Token fa965469e96d536925bfffa38a64d0919c511713',
+                'Authorization': 'Token 7ae40883088c024eea327e7ce685d55272921daa',
                 'Content-Type': 'application/json',
                     }
             postApi = 'http://localhost:8000/api/v2/pins/'

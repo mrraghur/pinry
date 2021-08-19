@@ -32,9 +32,11 @@ To run Frontend
 
 To run Scraper
 
+- `cd scrapeGithub`
 - Add Github Repository Urls to urls_to_be_scraped table in db.sqlite3
   `INSERT INTO urls_to_be_scraped (url) VALUES (<url1>), (<url_2>)...`
-- `cd scrapeGithub`
+- Or if there urls stored in file(Each line a new url), then insertUrls.py can be used to insert them to database.
+  `python insertUrls.py <filename.txt>`
 - `scrapy crawl images`
 
 To view the urls in database

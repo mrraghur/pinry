@@ -36,3 +36,6 @@ To run Scraper
   `INSERT INTO urls_to_be_scraped (url) VALUES (<url1>), (<url_2>)...`
 - `cd scrapeGithub`
 - `scrapy crawl images`
+
+To view the urls in database
+`SELECT url,isScraped FROM urls_to_be_scraped`

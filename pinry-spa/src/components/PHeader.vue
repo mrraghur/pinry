@@ -17,9 +17,10 @@
         </div>
         <div id="PinryNav" class="navbar-menu" :class="{ 'is-active': active}">
           <div class="navbar-start">
-            <a class="navbar-item" :href="bookmarklet">
+            <!--Uncomment to see bookmarklet-->
+            <!--<a class="navbar-item" :href="bookmarklet">
               Bookmarklet
-            </a>
+            </a>-->
             <div
               v-if="user.loggedIn"
               class="navbar-item has-dropdown is-hoverable">
@@ -58,7 +59,8 @@
                 </router-link>
               </div>
             </div>
-            <div class="navbar-item has-dropdown is-hoverable">
+            <!-- Uncomment to see browser extensions button-->
+            <!--<div class="navbar-item has-dropdown is-hoverable">
               <a class="navbar-link">
                 Browser Extensions
               </a>
@@ -70,7 +72,7 @@
                   Firefox
                 </a>
               </div>
-            </div>
+            </div>-->
           </div>
           <div class="navbar-end">
             <router-link

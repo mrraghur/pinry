@@ -7,7 +7,9 @@ def connectToDatabase(database):
     CREATE TABLE IF NOT EXISTS "urls_to_be_scraped" (
 	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
 	"url"	TEXT NOT NULL UNIQUE,
-	"isScraped"	INTEGER DEFAULT 0
+	"isScraped"	INTEGER DEFAULT 0,
+    "isValidReadme" INTEGER DEFAULT 1,
+    "readme" TEXT
     );
     """
     conn.execute(createTable)
@@ -20,7 +22,7 @@ def getUrlFromOutput(s):
     return s[0]
 
 def getAllUrlsToBeScraped(connection):
-    command = "SELECT url FROM urls_to_be_scraped WHERE isScraped==0"
+    command = "SELECT url FROM urls_to_be_scraped WHERE isScraped==0 AND isValid==1"
     urls = list(map(getUrlFromOutput,connection.execute(command).fetchall()))
     return urls
 
@@ -40,38 +42,15 @@ def addUrlsToBeScraped(connection,urls):
 
     return
 
-def markUrlAsScraped(connection,url):
+def markUrlAsScraped(connection,url,readmeText):
     """url is a string"""
-    updateCommand = f'UPDATE urls_to_be_scraped SET isScraped=1 WHERE url=="{url}"'
+    updateCommand = f'UPDATE urls_to_be_scraped SET isScraped=1,readme="{readmeText}" WHERE url=="{url}"'
+    connection.execute(updateCommand)
+
+def markUrlAsInvalid(connection,url):
+    """url is a string"""
+    updateCommand = f'UPDATE urls_to_be_scraped SET isValid=0 WHERE url=="{url}"'
     connection.execute(updateCommand)
 
 
 
-
-# con = connectToDatabase('../db.sqlite3')
-# updateUrlAsScraped(con,"https://github.com/0xAX/erlang-bookmarks")
-
-# DeleteTable(con)
-
-# createTable(con)
-
-
-# githubUrls = open('scrapeGithub/githubUrls.txt').read().split()[:20]
-# print(githubUrls[:20])
-
-# insertRecords(con,githubUrls[:10])
-# records = getRecords(con)
-# print(records.fetchall())
-
-# urls_to_be_scraped = list(map(lambda x:x[0],getAllUrlsToBeScraped(con)))
-# print(urls_to_be_scraped)
-
-# urls = ['https://github.com/anooj-gandham/blogSearch','https://github.com/anooj-gandham/wappalyzer_1','https://github.com/0x09AL','https://github.com']
-# addUrlsToBeScraped(con,urls)
-
-# records = getRecords(con)
-# print(records.fetchall())
-# pdb.set_trace()
-
-# con.commit()
-# con.close()

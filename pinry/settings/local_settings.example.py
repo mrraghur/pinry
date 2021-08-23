@@ -1,6 +1,6 @@
 import os
 
-
+print('i am in local settings example')
 # Please don't change following settings unless you know what you are doing
 STATIC_ROOT = '/data/static'
 

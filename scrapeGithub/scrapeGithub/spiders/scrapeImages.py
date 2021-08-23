@@ -3,7 +3,7 @@ import pdb, json
 from lxml import etree
 import requests
 
-from database import connectToDatabase, getAllUrlsToBeScraped, addUrlsToBeScraped, markUrlAsScraped
+from database import connectToDatabase, getAllUrlsToBeScraped, addUrlsToBeScraped, markUrlAsScraped, markUrlAsInvalid
 
 class ScrapeImages(scrapy.Spider):
     name = 'images'
@@ -40,6 +40,10 @@ class ScrapeImages(scrapy.Spider):
         try:
             readme = response.xpath('//div[@id="readme"]') #Get Readme element of github repo homepage
             if readme == []:
+                conn = connectToDatabase("../db.sqlite3")
+                markUrlAsInvalid(conn, response.url)
+                conn.commit()
+                conn.close()
                 return
             imageTags = []
             for tag in response.xpath('//a[@class="topic-tag topic-tag-link"]/text()').getall(): #Get tags from about me in github repo
@@ -64,21 +68,22 @@ class ScrapeImages(scrapy.Spider):
                 imageUrls = list(filter(None,imageUrls)) #Remove empty urls
                 imageUrls = list(map(self.completeUrl,imageUrls)) #Complete the urls if relative urls are given
                 for img in imageUrls:
-                    data = {'url':img,'referer':None,'description':description,'tags':imageTags, 'stars':stars}
+                    data = {'url':img,'referer':None,'description':description,'tags':imageTags, 'stars':stars,'referer':response.url}
                     resp = requests.post(postApi, headers=headers, data=json.dumps(data))
 
             # Get all <a> tags, extract href attribute from them, check whether url is complete,
             # then check whether given url is a url of Github repo
             githubRepos = list(filter(self.checkForRepoUrl,list(map(self.completeUrl,response.xpath('//a/@href').getall()))))
             githubRepos = list(set(githubRepos)) #Remove duplicates of repo urls
-
+            #Extracted text using xpath instead of beautiful soup
+            readmeText = ''.join(etree.HTML(readme).xpath('//text()')).replace('\n',' ').replace('  ','').replace('  ','').replace('"',"'")
 
             conn = connectToDatabase("../db.sqlite3")
 
             addUrlsToBeScraped(conn,githubRepos)
-            markUrlAsScraped(conn,response.url) #TODO Need to add logic to check whether repo has bee scraped successfully
-            # pdb.set_trace()
+            markUrlAsScraped(conn,response.url,readmeText) #TODO Need to add logic to check whether repo has bee scraped successfully
 
+            # pdb.set_trace()
             conn.commit()
             conn.close()
         except:

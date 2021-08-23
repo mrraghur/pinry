@@ -3,10 +3,10 @@
     <div class="filter-selector">
       <div class="card-content">
         <b-field>
-          <b-select placeholder="Choose Filter" v-model="filterType">
+          <!--<b-select placeholder="Choose Filter" v-model="filterType" class="select-dropdown">
             <option>Tag</option>
             <option>Board</option>
-          </b-select>
+          </b-select>-->
           <b-autocomplete
             v-show="filterType === 'Tag'"
             class="search-input"
@@ -16,10 +16,11 @@
             :open-on-focus="true"
             placeholder="select a filter then type to filter"
             icon="magnify"
-            @select="option => selected = option">
+            @select="option => selected = option"
+            >
             <template slot="empty">No results found</template>
           </b-autocomplete>
-          <template v-if="filterType === 'Board'">
+          <!--<template v-if="filterType === 'Board'">
             <b-input
               class="search-input"
               type="search"
@@ -31,7 +32,7 @@
             <p class="control">
               <b-button @click="searchBoard" class="button is-primary">Search</b-button>
             </p>
-          </template>
+          </template>-->
         </b-field>
       </div>
     </div>
@@ -41,12 +42,24 @@
 <script>
 import api from '../api';
 
+const options = [];
+api.Tag.fetchList().then(
+  (resp) => {
+    resp.data.forEach(
+      (tag) => {
+        options.push(tag.name);
+      },
+    );
+    // allTags = options;
+  },
+);
+console.log(options);
 export default {
   name: 'FilterSelector',
   data() {
     return {
-      filterType: null,
-      selectedOption: [],
+      filterType: 'Tag',
+      selectedOption: options,
       options: {
         Tag: [],
       },
@@ -60,6 +73,9 @@ export default {
       this.name = '';
       this.boardText = '';
       if (filterName === 'Tag') {
+        // console.log("I'm in tag");
+        // console.log(api.Tag.fetchList());
+        // console.log(this.options.Tag);
         this.selectedOption = this.options.Tag;
       }
     },
@@ -76,6 +92,7 @@ export default {
   watch: {
     filterType(newVal) {
       this.selectOption(newVal);
+      // console.log(newVal);
     },
     selected(newVal) {
       this.$emit(
@@ -100,7 +117,7 @@ export default {
   created() {
     api.Tag.fetchList().then(
       (resp) => {
-        const options = [];
+        // const options = [];
         resp.data.forEach(
           (tag) => {
             options.push(tag.name);
@@ -118,12 +135,19 @@ export default {
     padding-top: 3rem;
     padding-left: 2rem;
     padding-right: 2rem;
-  }
+    }
   .filter-selector {
     background-color: white;
     border-radius: 3px;
     .search-input {
       width: 100%;
+    }
+  .card-content {
+    position: fixed;
+    top: -15px;
+    left: 175px;
+    z-index: 1000;
+    width: 60%;
     }
   }
 </style>

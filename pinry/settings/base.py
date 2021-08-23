@@ -165,7 +165,9 @@ REST_FRAMEWORK = {
    ),
     ##New Changes
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser'
+       # 'rest_framework.permissions.IsAdminUser'
+
+      'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_FILTER_BACKENDS': (

@@ -3,10 +3,10 @@ from .base import *
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'xyz'
-
+#TODO Add env variable
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+#TODO Add env variable
 # SECURITY WARNING: use your actual domain name in production!
 ALLOWED_HOSTS = ['*']
 
@@ -28,4 +28,5 @@ INSTALLED_APPS += [
 try:
     from .local_settings import *
 except ImportError:
+    print('found import error')
     pass

@@ -39,23 +39,30 @@
                   <div class="description" v-show="item.description" v-html="niceLinks(item.description)"></div>
                   <div class="details">
                     <div class="pin-info">
-                      <span class="dim">Pinned by&nbsp;
+                      <span class="dim">
+                      <!--Pinned by&nbsp;
                         <span>
                           <router-link
                             :to="{ name: 'user', params: {user: item.author} }">
                             {{ item.author }}
                           </router-link>
                         </span>
+                          &nbsp;in&nbsp;-->
                         <template v-if="item.tags.length > 0">
-                          &nbsp;in&nbsp;
-                          <template v-for="tag in item.tags">
-                            <span v-bind:key="tag" class="pin-tag">
-                              <router-link :to="{ name: 'tag', params: {tag: tag} }"
-                                           params="{tag: tag}">{{ tag }}</router-link>
-                            </span>
-                          </template>
+                          <p class="pinName">
+                            <span class="pin-stars">🏷️&nbsp;</span>
+                            <template v-for="tag in item.tags">
+                              <span v-bind:key="tag" class="pin-tag">
+                                <router-link :to="{ name: 'tag', params: {tag: tag} }"
+                                             params="{tag: tag}">{{ tag }}, </router-link>
+                              </span>
+                            </template>
+                          </p>
                         </template>
-                        • <a :href="item.referer" target="_blank">Source</a>
+                        ℹ️
+                        <a :href="item.referer" target="_blank">Source &nbsp;<t/></a>
+                        <br/><span>&#11088; &nbsp;</span>
+                        <span class="pin-stars">Stars {{ item.stars }}</span>
                       </span>
                     </div>
                     <div class="is-clearfix"></div>
@@ -101,6 +108,7 @@ function createImageItem(pin) {
     width: `${pin.image.thumbnail.width}px`,
     height: `${pin.image.thumbnail.height}px`,
   };
+  image.stars = pin.stars;
   image.class = {};
   return image;
 }
@@ -351,7 +359,7 @@ $avatar-height: 30px;
 }
 .pin-footer {
   position: relative;
-  // top: $pin-footer-position-fix;
+  top: $pin-footer-position-fix;
   background-color: white;
   border-radius: 0 0 3px 3px ;
   box-shadow: 0 1px 0 #bbb;
@@ -359,8 +367,6 @@ $avatar-height: 30px;
     @include description-font;
     padding: 8px;
     border-bottom: 1px solid #DDDDDD;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   .details {
     @include secondary-font;
@@ -368,7 +374,6 @@ $avatar-height: 30px;
     > .pin-info {
       line-height: 16px;
       width: 220px;
-      // padding-left: $avatar-width + 5px;
     }
     .pin-info a {
       font-weight: bold;

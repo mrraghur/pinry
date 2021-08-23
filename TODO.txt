@@ -12,7 +12,9 @@ python manage.py migrate
 #Check TODOS
 
 3. Modify the front-end to add tags (TF-IDF) and description.
+Can be done using gensim library
 
 4. Add trending topics to UI and find a source for trending topics.
+
 
 5. Make a list of banned of urls to check

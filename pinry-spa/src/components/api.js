@@ -3,6 +3,8 @@ import storage from './utils/storage';
 
 const API_PREFIX = '/api/v2/';
 
+// const API_PREFIX = 'http://172.105.148.128:443/api/v2/';
+
 const Board = {
   create(name, private_ = false) {
     const url = `${API_PREFIX}boards/`;

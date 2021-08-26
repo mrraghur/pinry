@@ -84,13 +84,13 @@ class ScrapeImages(scrapy.Spider):
             #Extracted text using xpath instead of beautiful soup
             readmeText = ''.join(etree.HTML(readme).xpath('//text()')).replace('\n',' ').replace('  ','').replace('  ','').replace('"',"'")
 
-            # conn = connectToDatabase("../db.sqlite3")
+            conn = connectToDatabase("../db.sqlite3")
 
-            # addUrlsToBeScraped(conn,githubRepos)
-            # markUrlAsScraped(conn,response.url,readmeText) #TODO Need to add logic to check whether repo has bee scraped successfully
+            addUrlsToBeScraped(conn,githubRepos)
+            markUrlAsScraped(conn,response.url,readmeText) #TODO Need to add logic to check whether repo has bee scraped successfully
 
-            # # pdb.set_trace()
-            # conn.commit()
-            # conn.close()
+            # pdb.set_trace()
+            conn.commit()
+            conn.close()
         except:
             pdb.set_trace()

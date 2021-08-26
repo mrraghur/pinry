@@ -45,7 +45,6 @@ To run Scraper
 To view the urls in database
 `SELECT url,isScraped FROM urls_to_be_scraped`
 
-
 To run Nginx
 
 - copy pinry.conf from the project directory to /etc/nginx/conf.d/

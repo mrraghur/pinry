@@ -4,6 +4,8 @@ from lxml import etree
 import requests
 
 from database import connectToDatabase, getAllUrlsToBeScraped, addUrlsToBeScraped, markUrlAsScraped, markUrlAsInvalid
+import tensorflow as tf
+from images import checkIsLogo
 
 class ScrapeImages(scrapy.Spider):
     name = 'images'
@@ -13,7 +15,8 @@ class ScrapeImages(scrapy.Spider):
 
     conn.commit()
     conn.close()
-
+    model1 = tf.keras.models.load_model('../logoclassifiermodel_MobileNet')
+    print('Logo classifier model loaded')
 
     def completeUrl(self,url): #Function for completion of url if relative url is provided
         if len(url)> 0:
@@ -57,7 +60,7 @@ class ScrapeImages(scrapy.Spider):
             # pdb.set_trace()
             stars = response.xpath('//a[@class="social-count js-social-count"]/text()').getall()[0].split()[0]
             headers = {
-                'Authorization': 'Token 7ae40883088c024eea327e7ce685d55272921daa',
+                'Authorization': 'Token 8a5539fe405358243015d7ec5bcec2b644b06a41',
                 'Content-Type': 'application/json',
                     }
             postApi = 'http://localhost:8000/api/v2/pins/'
@@ -68,7 +71,10 @@ class ScrapeImages(scrapy.Spider):
                 imageUrls = list(filter(None,imageUrls)) #Remove empty urls
                 imageUrls = list(map(self.completeUrl,imageUrls)) #Complete the urls if relative urls are given
                 for img in imageUrls:
-                    data = {'url':img,'referer':None,'description':description,'tags':imageTags, 'stars':stars,'referer':response.url}
+                    isLogo = checkIsLogo(img,self.model1)
+                    if isLogo == '':
+                        return
+                    data = {'url':img,'referer':None,'description':description,'tags':imageTags, 'stars':stars,'referer':response.url,'isLogo':isLogo}
                     resp = requests.post(postApi, headers=headers, data=json.dumps(data))
 
             # Get all <a> tags, extract href attribute from them, check whether url is complete,
@@ -78,13 +84,13 @@ class ScrapeImages(scrapy.Spider):
             #Extracted text using xpath instead of beautiful soup
             readmeText = ''.join(etree.HTML(readme).xpath('//text()')).replace('\n',' ').replace('  ','').replace('  ','').replace('"',"'")
 
-            conn = connectToDatabase("../db.sqlite3")
+            # conn = connectToDatabase("../db.sqlite3")
 
-            addUrlsToBeScraped(conn,githubRepos)
-            markUrlAsScraped(conn,response.url,readmeText) #TODO Need to add logic to check whether repo has bee scraped successfully
+            # addUrlsToBeScraped(conn,githubRepos)
+            # markUrlAsScraped(conn,response.url,readmeText) #TODO Need to add logic to check whether repo has bee scraped successfully
 
-            # pdb.set_trace()
-            conn.commit()
-            conn.close()
+            # # pdb.set_trace()
+            # conn.commit()
+            # conn.close()
         except:
             pdb.set_trace()

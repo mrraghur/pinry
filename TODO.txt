@@ -18,3 +18,7 @@ Can be done using gensim library
 
 
 5. Make a list of banned of urls to check
+
+6. Make a logic to filter out images whose links are broken and alt text is displayed as it raises error in code.
+https://github.com/Lazin/go-ngram
+

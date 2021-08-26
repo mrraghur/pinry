@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django_images.models import Image as BaseImage, Thumbnail
 from taggit.managers import TaggableManager
 from django.http.response import Http404
+from urllib.error import HTTPError
 
 
 from users.models import User
@@ -29,22 +30,26 @@ class ImageManager(models.Manager):
         headers = dict(self._default_ua)
         if referer is not None:
             headers["Referer"] = referer
-        response = requests.get(url, headers=headers)
-        if response.content[:4] == b'<svg':
-            imageType = 'svg'
-            svg2png(bytestring=response.content,write_to='output')
+        # response = requests.get(url, headers=headers)
+        # if response.content[:4] == b'<svg':
+        #     imageType = 'svg'
+        #     svg2png(bytestring=response.content,write_to='output')
 
-            buf.write(open('output','rb').read())
-        else:
-            buf.write(response.content)
-            tempImage = open('output','wb')
-            tempImage.write(response.content)
-            tempImage.close()
+        #     buf.write(open('output','rb').read())
+        # else:
+        #     buf.write(response.content)
+        #     tempImage = open('output','wb')
+        #     tempImage.write(response.content)
+        #     tempImage.close()
+        # pdb.set_trace()
+        path = '/tmp/output'
+        imgFile = open(path,'rb').read()
+        buf.write(imgFile)
 
-        dims = PILImage.open('output').size
-        if dims[0] < 45 or dims[1] < 45:
-            raise Http404("Given image is not valid for submission")
-            #TODO Change the error to 400, not 404.
+        # dims = PILImage.open('output').size
+        # if dims[0] < 45 or dims[1] < 45:
+        #     raise HTTPError(url,400,'Not a proper image')
+        # #     #TODO Change the error to 400, not 404.
         obj = InMemoryUploadedFile(buf, 'image', file_name,
                                    None, buf.tell(), None)
         # create the image and its thumbnails in one transaction, removing
@@ -107,6 +112,7 @@ class Pin(models.Model):
     published = models.DateTimeField(auto_now_add=True)
     tags = TaggableManager()
     stars = models.CharField(default=0, max_length=32, blank=True, null=True)
+    isLogo = models.BooleanField(default=False, blank=False)
 
     def tag_list(self):
         return self.tags.all()

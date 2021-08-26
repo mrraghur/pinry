@@ -22,7 +22,7 @@ def getUrlFromOutput(s):
     return s[0]
 
 def getAllUrlsToBeScraped(connection):
-    command = "SELECT url FROM urls_to_be_scraped WHERE isScraped==0 AND isValid==1"
+    command = "SELECT url FROM urls_to_be_scraped WHERE isScraped==0 AND isValidReadme==1"
     urls = list(map(getUrlFromOutput,connection.execute(command).fetchall()))
     return urls
 
@@ -49,7 +49,7 @@ def markUrlAsScraped(connection,url,readmeText):
 
 def markUrlAsInvalid(connection,url):
     """url is a string"""
-    updateCommand = f'UPDATE urls_to_be_scraped SET isValid=0 WHERE url=="{url}"'
+    updateCommand = f'UPDATE urls_to_be_scraped SET isValidReadme=0 WHERE url=="{url}"'
     connection.execute(updateCommand)
 
 

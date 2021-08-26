@@ -44,3 +44,21 @@ To run Scraper
 
 To view the urls in database
 `SELECT url,isScraped FROM urls_to_be_scraped`
+
+
+To run Nginx
+
+- copy pinry.conf from the project directory to /etc/nginx/conf.d/
+- remove dist if it exists from pinry-spa and run `yarn build`
+- copy dist to /var/www/pinry and change the appropriate user permissions to nginx (`sudo chown -R nginx:nginx dist`)
+- `chmod 710 /var/www/pinry/dist/`
+- `sudo setenforce 0`
+https://stackoverflow.com/questions/16808813/nginx-serve-static-file-and-got-403-forbidden
+
+
+
+#BUGS
+- Unable to push gifs through the scraper pipeline
+- Clean exit to code if unable to download image(scrapeGithub/image.py)
+- Scraper is stuck after some time of scraping (may be memory issues in my machine)
+

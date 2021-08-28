@@ -12,10 +12,10 @@ class ScrapeImages(scrapy.Spider):
     conn = connectToDatabase("../db.sqlite3")
     # start_urls = ['https://github.com/anooj-gandham/inv_prob','https://github.com/typesense/typesense-instantsearch-adapter','https://github.com/facebook/create-react-app']
     start_urls = getAllUrlsToBeScraped(conn)
-
+    # start_urls = ['https://github.com/Lazin/go-ngram']
     conn.commit()
     conn.close()
-    model1 = tf.keras.models.load_model('../logoclassifiermodel_MobileNet')
+    model1 = tf.keras.models.load_model('../logoclassifiermodel_MobileNet_664483')
     print('Logo classifier model loaded')
 
     def completeUrl(self,url): #Function for completion of url if relative url is provided
@@ -71,11 +71,15 @@ class ScrapeImages(scrapy.Spider):
                 imageUrls = list(filter(None,imageUrls)) #Remove empty urls
                 imageUrls = list(map(self.completeUrl,imageUrls)) #Complete the urls if relative urls are given
                 for img in imageUrls:
-                    isLogo = checkIsLogo(img,self.model1)
-                    if isLogo == '':
-                        return
-                    data = {'url':img,'referer':None,'description':description,'tags':imageTags, 'stars':stars,'referer':response.url,'isLogo':isLogo}
-                    resp = requests.post(postApi, headers=headers, data=json.dumps(data))
+                    try:
+                        isLogo = checkIsLogo(img,self.model1)
+                    except:
+                        #pdb.set_trace()
+                        print('this is an exception unable to download the image due to broken link '+ img)
+                        continue
+                    if isLogo != 1:
+                        data = {'url':img,'referer':None,'description':description,'tags':imageTags, 'stars':stars,'referer':response.url,'isLogo':isLogo}
+                        resp = requests.post(postApi, headers=headers, data=json.dumps(data))
 
             # Get all <a> tags, extract href attribute from them, check whether url is complete,
             # then check whether given url is a url of Github repo

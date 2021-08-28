@@ -63,6 +63,9 @@
                         <a :href="item.referer" target="_blank">Source &nbsp;<t/></a>
                         <br/><span>&#11088; &nbsp;</span>
                         <span class="pin-stars">Stars {{ item.stars }}</span>
+                        <!--Dev feature-->
+                        <br/><span>isLogo &nbsp;</span>
+                        <span class="pin-stars"> {{ item.isLogo }}</span>
                       </span>
                     </div>
                     <div class="is-clearfix"></div>
@@ -110,6 +113,8 @@ function createImageItem(pin) {
   };
   image.stars = pin.stars;
   image.class = {};
+  image.isLogo = pin.isLogo;
+  console.log(pin);
   return image;
 }
 

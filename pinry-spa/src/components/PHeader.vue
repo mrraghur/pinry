@@ -4,7 +4,8 @@
       <div class="container">
         <div class="navbar-brand">
           <a class="navbar-item" href="/">
-            <img src="../assets/logo-dark.png" height="28">
+            <img src="../assets/logo.png" height="28">
+            <p class="logotitle">Vanavil</p>
           </a>
           <a role="button" class="navbar-burger burger"
              aria-label="menu" aria-expanded="false"
@@ -189,5 +190,14 @@ export default {
 </script>
 
 <style scoped>
+ @import url('https://fonts.googleapis.com/css2?family=Vidaloka&display=swap');
 
+.navbar {
+background: #F7FFF6;
+}
+.logotitle{
+  left: -50px;
+  font-family: 'Vidaloka', serif;
+  font-size: 30px;
+}
 </style>

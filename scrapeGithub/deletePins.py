@@ -11,9 +11,10 @@ ids = conn.execute('SELECT id FROM core_pin').fetchall()
 conn.commit()
 conn.close()
 
-
+#ENTER valid token generated in your machine or
+#TODO change it to env variable
 headers = {
-    'Authorization': 'Token 8a5539fe405358243015d7ec5bcec2b644b06a41',
+    'Authorization': 'Token 21064be4b6a703be0b5cceac361df43dc3b50e81',
     'Content-Type': 'application/json',
         }
 deleteApi = 'http://localhost:8000/api/v2/pins/'
@@ -23,7 +24,4 @@ for id in ids:
     print(deletePinApi)
     response = requests.delete(deletePinApi,headers=headers)
     print(response.url, response.status_code)
-
-
-
 

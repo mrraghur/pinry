@@ -16,9 +16,7 @@ Can be done using gensim library
 
 4. Add trending topics to UI and find a source for trending topics.
 
-
 5. Make a list of banned of urls to check
 
-6. Make a logic to filter out images whose links are broken and alt text is displayed as it raises error in code.
-https://github.com/Lazin/go-ngram
+6. Need to add logic to check whether repo has bee scraped successfully
 

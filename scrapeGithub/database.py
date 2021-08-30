@@ -22,6 +22,7 @@ def getUrlFromOutput(s):
     return s[0]
 
 def getAllUrlsToBeScraped(connection):
+    #Get all github repo urls from database
     command = "SELECT url FROM urls_to_be_scraped WHERE isScraped==0 AND isValidReadme==1"
     urls = list(map(getUrlFromOutput,connection.execute(command).fetchall()))
     return urls
@@ -40,7 +41,6 @@ def addUrlsToBeScraped(connection,urls):
         insertCommand = f"INSERT INTO urls_to_be_scraped (url, isScraped) VALUES {records}"
         connection.execute(insertCommand)
 
-    return
 
 def markUrlAsScraped(connection,url,readmeText):
     """url is a string"""

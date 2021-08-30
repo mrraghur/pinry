@@ -60,4 +60,4 @@ https://stackoverflow.com/questions/16808813/nginx-serve-static-file-and-got-403
 - Unable to push gifs through the scraper pipeline
 - Clean exit to code if unable to download image(scrapeGithub/image.py)
 - Scraper is stuck after some time of scraping (may be memory issues in my machine)
-
+- When a pin is deleted, the tags of pin are not deleted

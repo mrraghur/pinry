@@ -5,6 +5,8 @@ import requests
 
 from database import connectToDatabase, getAllUrlsToBeScraped, addUrlsToBeScraped, markUrlAsScraped, markUrlAsInvalid
 import tensorflow as tf
+from gensim.summarization import keywords
+
 from images import checkIsLogo
 
 class ScrapeImages(scrapy.Spider):
@@ -15,7 +17,8 @@ class ScrapeImages(scrapy.Spider):
     # start_urls = ['https://github.com/Lazin/go-ngram']
     conn.commit()
     conn.close()
-    model1 = tf.keras.models.load_model('../logoclassifiermodel_MobileNet_664483')
+    #Load Tensorflow classifier model
+    model1 = tf.keras.models.load_model('../logoclassifiermodel_MobileNet_867473')
     print('Logo classifier model loaded')
 
     def completeUrl(self,url): #Function for completion of url if relative url is provided
@@ -48,6 +51,10 @@ class ScrapeImages(scrapy.Spider):
                 conn.commit()
                 conn.close()
                 return
+
+            readme = readme.getall()[0]
+            readmeText = ''.join(etree.HTML(readme).xpath('//text()')).replace('\n',' ').replace('  ','').replace('  ','').replace('"',"'")
+
             imageTags = []
             for tag in response.xpath('//a[@class="topic-tag topic-tag-link"]/text()').getall(): #Get tags from about me in github repo
                 imageTags.append(tag.split()[0])
@@ -57,28 +64,34 @@ class ScrapeImages(scrapy.Spider):
                 description = description[0]
             else: #TODO Fill with alternate content
                 description = ""
-            # pdb.set_trace()
+
+            if imageTags == []:
+                imageTags = keywords(readmeText + ' ' + description).split()
+
             stars = response.xpath('//a[@class="social-count js-social-count"]/text()').getall()[0].split()[0]
+            #ENTER valid token generated in your machine or
+            #TODO change it to env variable
             headers = {
-                'Authorization': 'Token 8a5539fe405358243015d7ec5bcec2b644b06a41',
+                'Authorization': 'Token 21064be4b6a703be0b5cceac361df43dc3b50e81',
                 'Content-Type': 'application/json',
                     }
             postApi = 'http://localhost:8000/api/v2/pins/'
 
-            readme = readme.getall()[0]
+
             imageUrls = etree.HTML(readme).xpath('//img/@src') #Check for <img> tags and get src attribute from them
             if imageUrls != []:
                 imageUrls = list(filter(None,imageUrls)) #Remove empty urls
                 imageUrls = list(map(self.completeUrl,imageUrls)) #Complete the urls if relative urls are given
+
                 for img in imageUrls:
                     try:
-                        isLogo = checkIsLogo(img,self.model1)
+                        isLogo = checkIsLogo(img,self.model1) #Pass classifier model to the check function
                     except:
-                        #pdb.set_trace()
                         print('this is an exception unable to download the image due to broken link '+ img)
                         continue
                     if isLogo != 1:
                         data = {'url':img,'referer':None,'description':description,'tags':imageTags, 'stars':stars,'referer':response.url,'isLogo':isLogo}
+                        # pdb.set_trace() 
                         resp = requests.post(postApi, headers=headers, data=json.dumps(data))
 
             # Get all <a> tags, extract href attribute from them, check whether url is complete,
@@ -86,10 +99,9 @@ class ScrapeImages(scrapy.Spider):
             githubRepos = list(filter(self.checkForRepoUrl,list(map(self.completeUrl,response.xpath('//a/@href').getall()))))
             githubRepos = list(set(githubRepos)) #Remove duplicates of repo urls
             #Extracted text using xpath instead of beautiful soup
-            readmeText = ''.join(etree.HTML(readme).xpath('//text()')).replace('\n',' ').replace('  ','').replace('  ','').replace('"',"'")
 
             conn = connectToDatabase("../db.sqlite3")
-
+            #Urls which need to be scraped should be passed as list
             addUrlsToBeScraped(conn,githubRepos)
             markUrlAsScraped(conn,response.url,readmeText) #TODO Need to add logic to check whether repo has bee scraped successfully
 

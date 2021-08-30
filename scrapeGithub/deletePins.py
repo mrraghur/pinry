@@ -4,8 +4,15 @@ from database import connectToDatabase, getAllUrlsToBeScraped, addUrlsToBeScrape
 
 conn = connectToDatabase("../db.sqlite3")
 
-ids = conn.execute('SELECT id FROM core_pin').fetchall()
+blockedList = ['https://github.com/all-contributors/app',]
 
+toBeDeleted = []
+for blockedUrl in blockedList:
+    query = f'SELECT id FROM core_pin WHERE referer="{blockedUrl}"'
+    toBeDeleted += conn.execute(query).fetchall()
+
+# toBeDeleted = conn.execute('SELECT id FROM core_pin').fetchall()
+# Uncomment above to delete all pins
 # pdb.set_trace()
 
 conn.commit()
@@ -19,7 +26,7 @@ headers = {
         }
 deleteApi = 'http://localhost:8000/api/v2/pins/'
 
-for id in ids:
+for id in toBeDeleted:
     deletePinApi = deleteApi + str(id[0])
     print(deletePinApi)
     response = requests.delete(deletePinApi,headers=headers)

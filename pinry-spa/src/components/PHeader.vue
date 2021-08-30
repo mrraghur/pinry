@@ -202,7 +202,7 @@ background: #F7FFF6;
   font-size: 30px;
 }
 .logo{
-  position: fixed;
+  position: absolute;
   left:3%;
 }
 </style>

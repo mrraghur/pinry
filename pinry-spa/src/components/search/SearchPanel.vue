@@ -143,7 +143,7 @@ export default {
       width: 100%;
     }
   .card-content {
-    position: fixed;
+    position: absolute;
     top: -15px;
     left: 30%;
     z-index: 1000;

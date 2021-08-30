@@ -145,9 +145,9 @@ export default {
   .card-content {
     position: fixed;
     top: -15px;
-    left: 175px;
+    left: 30%;
     z-index: 1000;
-    width: 60%;
+    width: 45%;
     }
   }
 </style>

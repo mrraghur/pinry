@@ -3,10 +3,12 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="container">
         <div class="navbar-brand">
-          <a class="navbar-item" href="/">
-            <img src="../assets/logo.png" height="28">
-            <p class="logotitle">Vanavil</p>
-          </a>
+          <div class="logo">
+            <a class="navbar-item" href="/">
+              <img src="../assets/logo.png" height="28">
+              <p class="logotitle">Vanavil</p>
+            </a>
+          </div>
           <a role="button" class="navbar-burger burger"
              aria-label="menu" aria-expanded="false"
              v-on:click="toggleMenu"
@@ -196,8 +198,11 @@ export default {
 background: #F7FFF6;
 }
 .logotitle{
-  left: -50px;
   font-family: 'Vidaloka', serif;
   font-size: 30px;
+}
+.logo{
+  position: fixed;
+  left:3%;
 }
 </style>

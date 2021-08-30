@@ -114,7 +114,6 @@ function createImageItem(pin) {
   image.stars = pin.stars;
   image.class = {};
   image.isLogo = pin.isLogo;
-  console.log(pin);
   return image;
 }
 
@@ -197,7 +196,7 @@ export default {
     },
     buildBlocks(results) {
       const blocks = [];
-      results.forEach(
+      results.sort(() => Math.random() - 0.5).forEach(
         (pin) => {
           const item = createImageItem(pin);
           blocks.push(
@@ -205,6 +204,7 @@ export default {
           );
         },
       );
+      console.log(blocks[0]);
       return blocks;
     },
     openPreview(pinItem) {

@@ -6,6 +6,12 @@ from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
 
 from core.views import drf_router
+##New Changes
+from rest_framework.authtoken import views
+#Links for api authentication
+#https://www.youtube.com/watch?v=PFcnQbOfbUU&t=154s
+#https://stackoverflow.com/questions/26906630/django-rest-framework-authentication-credentials-were-not-provided
+
 
 
 admin.autodiscover()
@@ -20,6 +26,9 @@ urlpatterns = [
     # old api and views
     path('admin/', admin.site.urls),
     path('api/v2/profile/', include('users.urls')),
+
+    ##New Changes
+    path('api-token-auth/', views.obtain_auth_token, name='api-token-auth')
 ]
 
 

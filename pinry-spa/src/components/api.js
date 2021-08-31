@@ -1,7 +1,11 @@
 import axios from 'axios';
 import storage from './utils/storage';
+// import proxy from '../../vue.config';
 
 const API_PREFIX = '/api/v2/';
+// const API_PREFIX = 'http://172.105.148.128:443/api/v2/';
+
+// const API_PREFIX = 'http://172.105.148.128:443/api/v2/';
 
 const Board = {
   create(name, private_ = false) {

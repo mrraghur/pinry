@@ -3,9 +3,12 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="container">
         <div class="navbar-brand">
-          <a class="navbar-item" href="/">
-            <img src="../assets/logo-dark.png" height="28">
-          </a>
+          <div class="logo">
+            <a class="navbar-item" href="/">
+              <img src="../assets/logo.png" height="28">
+              <p class="logotitle">Vanavil</p>
+            </a>
+          </div>
           <a role="button" class="navbar-burger burger"
              aria-label="menu" aria-expanded="false"
              v-on:click="toggleMenu"
@@ -17,9 +20,10 @@
         </div>
         <div id="PinryNav" class="navbar-menu" :class="{ 'is-active': active}">
           <div class="navbar-start">
-            <a class="navbar-item" :href="bookmarklet">
+            <!--Uncomment to see bookmarklet-->
+            <!--<a class="navbar-item" :href="bookmarklet">
               Bookmarklet
-            </a>
+            </a>-->
             <div
               v-if="user.loggedIn"
               class="navbar-item has-dropdown is-hoverable">
@@ -58,7 +62,8 @@
                 </router-link>
               </div>
             </div>
-            <div class="navbar-item has-dropdown is-hoverable">
+            <!-- Uncomment to see browser extensions button-->
+            <!--<div class="navbar-item has-dropdown is-hoverable">
               <a class="navbar-link">
                 Browser Extensions
               </a>
@@ -70,7 +75,7 @@
                   Firefox
                 </a>
               </div>
-            </div>
+            </div>-->
           </div>
           <div class="navbar-end">
             <router-link
@@ -187,5 +192,17 @@ export default {
 </script>
 
 <style scoped>
+ @import url('https://fonts.googleapis.com/css2?family=Vidaloka&display=swap');
 
+.navbar {
+background: #F7FFF6;
+}
+.logotitle{
+  font-family: 'Vidaloka', serif;
+  font-size: 30px;
+}
+.logo{
+  position: absolute;
+  left:3%;
+}
 </style>

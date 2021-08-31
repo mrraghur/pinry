@@ -2,16 +2,16 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8000/',
+	      target: 'http://localhost:8000/',
         changeOrigin: true,
         ws: true,
       },
       '/media': {
-        target: 'http://localhost:8000/',
+	      target: 'http://localhost:8000/',
         changeOrigin: true,
       },
       '/static/js/': {
-        target: 'http://localhost:8000/',
+	      target: 'http://localhost:8000/',
         changeOrigin: true,
       },
     },

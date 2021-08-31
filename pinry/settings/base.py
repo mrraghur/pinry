@@ -22,7 +22,13 @@ INSTALLED_APPS = [
     'core',
     'users',
     'pinry_plugins.apps.PinryPluginsConfig',
+    #New Changes
+    'rest_framework.authtoken'
 ]
+#Links for api authentication
+#https://www.youtube.com/watch?v=PFcnQbOfbUU&t=154s
+#https://stackoverflow.com/questions/26906630/django-rest-framework-authentication-credentials-were-not-provided
+
 
 ROOT_URLCONF = 'pinry.urls'
 
@@ -153,10 +159,17 @@ DRF_URL_FIELD_NAME = "resource_link"
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    ##New Changes
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.TokenAuthentication',
+   ),
+    ##New Changes
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+       # 'rest_framework.permissions.IsAdminUser'
+
+      'rest_framework.permissions.AllowAny'
     ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
